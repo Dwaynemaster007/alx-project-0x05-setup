@@ -404,7 +404,7 @@ For questions or support related to this project:
 *Mastering React Hooks, One Component at a Time* ✨
 
 [![GitHub](https://img.shields.io/badge/GitHub-Dwaynemaster007-181717?style=for-the-badge&logo=github)](https://github.com/Dwaynemaster007)
-[![Portfolio](https://img.shields.io/badge/Portfolio-Visit-FF6B6B?style=for-the-badge&logo=google-chrome)](https://your-portfolio.com)
+[![Portfolio](https://img.shields.io/badge/Portfolio-Visit-FF6B6B?style=for-the-badge&logo=google-chrome)]((https://www.datascienceportfol.io/thubelihledlamini88))
 
 **Tags:** `react-hooks` · `nextjs` · `typescript` · `ai-image-generation` · `custom-hooks` · `tailwind-css` · `gpt-4` · `alx-prodev`
 
