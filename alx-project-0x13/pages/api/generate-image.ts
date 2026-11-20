@@ -3,15 +3,24 @@ import { RequestProps } from "@/interfaces";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const handler = async (request: NextApiRequest, response: NextApiResponse) => {
-  const gptApiKey = process.env.NEXT_PUBLIC_GPT_API_KEY;
+  if (request.method !== "POST") {
+    response.setHeader("Allow", "POST");
+    return response.status(405).json({ error: "Method not allowed" });
+  }
+
+  // Server-only secret. NEXT_PUBLIC_GPT_API_KEY is still read so older .env files keep working.
+  const gptApiKey = process.env.GPT_API_KEY || process.env.NEXT_PUBLIC_GPT_API_KEY;
   const gptUrl = "https://chatgpt-42.p.rapidapi.com/texttoimage";
 
   if (!gptApiKey || !gptUrl) {
-    return response.status(500).json({ error: "API key or URL is missing in environment variables" });
+    return response.status(500).json({ error: "GPT_API_KEY is not set. Add it to .env.local (see README)." });
   }
 
   try {
     const { prompt }: RequestProps = request.body;
+    if (!prompt?.trim()) {
+      return response.status(400).json({ error: "Please enter a prompt" });
+    }
 
     const res = await fetch(gptUrl, {
       method: "POST",
@@ -28,13 +37,13 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
     });
 
     if (!res.ok) {
-      throw new Error("Failed to fetch from DALLE");
+      throw new Error(`Image API responded with ${res.status}`);
     }
 
     const data = await res.json();
 
     return response.status(200).json({
-      message: data?.generated_image || "https://via.placeholder.com/600x400?text=Generated+Image",
+      message: data?.generated_image || "https://placehold.co/512x512?text=Generated+Image",
     });
   } catch (error) {
     console.error("Error in API route:", error);

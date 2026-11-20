@@ -24,15 +24,14 @@ const useFetchData = <T, R extends WithPrompt>() => {
         }
       });
 
-      if (!resp.ok)
-      {
-        throw new Error('Failed to fetch data');
+      const result = await resp.json().catch(() => ({}));
+      if (!resp.ok) {
+        throw new Error(result?.error || 'Failed to fetch data');
       }
 
-      const result = await resp.json()
       setResponseData(result)
       setGeneratedImages((prev) => [...prev, { imageUrl: result?.message, prompt: body?.prompt }]);
-        } catch (err) {
+    } catch (err) {
       setError((err as Error).message)
     } finally {
       setIsLoading(false)
